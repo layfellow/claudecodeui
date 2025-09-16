@@ -110,6 +110,67 @@ To use Claude Code's full functionality, you'll need to manually enable tools:
 
 **Recommended approach**: Start with basic tools enabled and add more as needed. You can always adjust these settings later.
 
+## Installation as a User Systemd Service
+
+For production deployment or to run Claude Code UI as a background service, you can set it up as a systemd user service that starts automatically.
+
+### Prerequisites
+
+- Linux system with systemd
+- Node.js installed via NVM (Node Version Manager)
+
+### Setup
+
+1. **Run the automated installer:**
+```bash
+make install
+```
+
+This command will:
+- Create `.env` file from `.env.example` (if it doesn't exist)
+- Install npm dependencies
+- Generate a systemd service file with your system-specific paths
+- Install the service file to `~/.config/systemd/user/`
+- Enable the service for automatic startup
+
+### Service Management
+
+After installation, manage the service using these commands:
+
+```bash
+# Start the service
+make start
+# or: systemctl --user start claude-code-ui
+
+# Stop the service
+make stop
+# or: systemctl --user stop claude-code-ui
+
+# Check service status
+make status
+# or: systemctl --user status claude-code-ui
+
+# View real-time logs
+make logs
+# or: journalctl --user -u claude-code-ui -f
+```
+
+### Service Features
+
+- **Automatic Restart**: Service restarts automatically if it crashes
+- **Environment Variables**: Proper NODE_ENV=production and PORT=3001 configuration
+- **NVM Integration**: Uses your specific Node.js version from NVM installation
+- **Logging**: All output goes to systemd journal for easy debugging
+- **User Service**: Runs under your user account, starts when you log in
+
+### Accessing the Service
+
+Once running, the service will be available at:
+- **Local**: `http://localhost:3001`
+- **Network**: `http://your-server-ip:3001` (configure firewall as needed)
+
+The service automatically starts when you log in and runs in the background.
+
 ## TaskMaster AI Integration *(Optional)*
 
 Claude Code UI supports **[TaskMaster AI](https://github.com/eyaltoledano/claude-task-master)** (aka claude-task-master) integration for advanced project management and AI-powered task planning.
